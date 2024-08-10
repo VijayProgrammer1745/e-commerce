@@ -1,0 +1,57 @@
+.size-filter.list-filter li a:hover, size-filter.list-filter li.active a {
+	color: #000 !important;
+}
+.header-style-3 .search-style-2 form input {
+	max-width: 100%;
+}
+.search-box {
+	position: absolute;
+	z-index: 1000;
+	left: 0;
+	top: 45px;
+	background: rgb(255, 255, 255);
+	/*border: 1px solid #e2e9e1;*/
+	width: 100%;
+	height: auto;
+	max-height: 250px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	box-shadow: 0 7px 12px rgba(0, 0, 0, 0.2);
+	border-radius: 0 0 4px 4px;
+	display: none;
+}
+.search-box.show {
+	display: block;
+}
+.search-box ul li.item a {
+	padding: 12px 12px 12px 55px;
+	display: block;
+}
+.search-box ul li.no-result {
+	padding: 12px 12px 12px 55px;
+}
+.search-box ul li.item a .product-title {
+	font-size: 18px;
+	font-weight: bold;
+}
+.search-box ul li.item a .sub-title {
+	font-size: 14px;
+}
+#coupon-popup .modal-body {
+	padding: 0;
+}
+#coupon-popup .coupon-list li {
+	border-bottom: 1px solid #dee2e6;
+}
+#coupon-popup .coupon-list li:last-child {
+	border: 0 none;
+}
+#coupon-popup .coupon-list li a {
+	padding: 0.5rem;
+	display: block;
+}
+.coupon-remove {
+	font-size: 20px;
+	cursor: pointer;
+	color: #e62323;
+}
