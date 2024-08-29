@@ -12,7 +12,8 @@
 	$discountPercent = 0;
 	$weight = 0;
 	while ($row = mysqli_fetch_array($result)) {
-		$weight += $row['Weight'] * $row['ProductQuantity'];
+		$productWeight = explode($row['Weight'], 'GM');
+		$weight += ($row['Weight'] * $row['ProductQuantity']);
 		$images = mysqli_query($conn, "SELECT * FROM productimages WHERE ProductID = '{$row['ProductID']}'") or die(mysqli_error($conn));
 		$img = mysqli_fetch_assoc($images);
 		$image = (!empty($img['ImageName'])) ? $img['ImageName'] : 'https://admin.ramdevpcb.com/assets/images/product_images/default_product.png';

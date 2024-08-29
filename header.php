@@ -55,7 +55,7 @@
 			<div class="header-wrap">
 				<div class="logo logo-width-1">
 					<a href="./">
-						<img src="assets/imgs/theme/RamdevLogo.jpg" alt="logo" style="min-width:130px"/>
+						<img src="assets/imgs/logo/logo-1.png" alt="logo" style="min-width:130px"/>
 					</a>
 				</div>
 				<div class="header-right">
@@ -108,6 +108,7 @@
 									?>
 									<ul>
 										<?php
+											$subtotal_price = 0;
 											while($row=mysqli_fetch_array($result)) {
 												$price = $row['BtoCPrice'];
 												$price_200 = $row['BtoBPrice1'];
@@ -172,7 +173,7 @@
 		<div class="container">
 			<div class="header-wrap header-space-between position-relative  main-nav">
 				<div class="logo logo-width-1 d-block d-lg-none">
-					<a href="index.php"><img src="assets/imgs/theme/RamdevLogo.jpg" alt="logo"></a>
+					<a href="index.php"><img src="assets/imgs/logo/logo-1.png" alt="logo"></a>
 				</div>
 				<div class="header-nav d-none d-lg-flex">
 					<div class="main-categori-wrap d-none d-lg-block">

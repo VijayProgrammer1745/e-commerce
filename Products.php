@@ -1,10 +1,20 @@
 <?php
 	session_start();
-	include('db.php');
-	
-	$subCategoryId = $_GET['subCategoryId'];
-	$categoryId = $_GET['categoryId'];
-	$userId = $_SESSION['userid'];
+	require_once('db.php');
+
+	$userId = '';
+	if (isset($_SESSION['userid'])) {
+		$userId = $_SESSION['userid'];
+	}
+
+	$driver = '';
+	if (isset($_GET['driver'])) {
+		$driver = $_GET['driver'];
+	}
+	$watt = '';
+	if (isset($_GET['watt'])) {
+		$watt = $_GET['watt'];
+	}
 
 	$usr = mysqli_query($conn, "SELECT * FROM Users WHERE UserID = '$userId'") or die(mysqli_error($conn));
 	$users = mysqli_fetch_assoc($usr);
@@ -248,136 +258,111 @@
 				
 				$query = "SELECT * FROM ";
 				if (!empty($_GET['SubCategoryId'])) {
-					$query .= "BrandModel where SubCategoryID='".$_GET['SubCategoryId']."'";
+					$query .= "BrandModel WHERE SubCategoryID='".$_GET['SubCategoryId']."'";
 				}
 				if (!empty($_GET['CategoryId'])) {
-					$query .= "BrandSubCategory where CategoryId='".$_GET['CategoryId']."'";
+					$query .= "BrandSubCategory WHERE CategoryId='".$_GET['CategoryId']."'";
 				}
 				if (!empty($_GET['ModelId'])) {
-					
-						 if($userId!=''){
-												$queryy="select * from Users where UserID='$userId'";
-												$resultt = mysqli_query($conn, $queryy);
-											$rows = mysqli_fetch_assoc($resultt);
-											$cate=$rows['AssignDriver'];
-											if($cate == '1500MA'){
-												$dri = '750MA';
-											}
-											else if($cate=='750MA'){
-												$dri = '1500MA';
-											}
-											else{
-												$dri = 'B';
-											}
-											if(!empty($_GET['driver']) && !empty($_GET['watt'])){
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].") and A.Watts IN (".$_GET['watt'].") order by A.Driver";
-												}else if(!empty($_GET['driver']) && empty($_GET['watt'])){
-												$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].")  order by A.Driver";
-												}
-												else if(empty($_GET['driver']) && !empty($_GET['watt'])){
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Watts IN (".$_GET['watt'].") order by A.Watts";
-												}
-												else{
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and Driver NOT LIKE '%".$dri."%'";
-												}
-											//echo $query3;
-											}else{
-												$queryy="select * from UserRoles where RoleID='2'";
-												$resultt = mysqli_query($conn, $queryy);
-											$rows = mysqli_fetch_assoc($resultt);
-											$cate=$rows['assigndriver'];
-											if($cate == '1500MA'){
-												$dri = '750MA';
-											}
-											else if($cate=='750MA'){
-												$dri = '1500MA';
-											}
-											else{
-												$dri = 'B';
-											}
-												if(!empty($_GET['driver']) && !empty($_GET['watt'])){
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].") and A.Watts IN (".$_GET['watt'].") order by A.Driver";
-												}else if(!empty($_GET['driver']) && empty($_GET['watt'])){
-												$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].")  order by A.Driver";
-												}
-												else if(empty($_GET['driver']) && !empty($_GET['watt'])){
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Watts IN (".$_GET['watt'].") order by A.Watts";
-												}
-												else{
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and Driver NOT LIKE '%".$dri."%'";
-												}
-											}
-					
+					if ($userId != '') {
+						$queryy="SELECT * FROM Users WHERE UserID='$userId'";
+						$resultt = mysqli_query($conn, $queryy);
+						$rows = mysqli_fetch_assoc($resultt);
+						$cate = $rows['AssignDriver'];
+						if ($cate == '1500MA') {
+							$dri = '750MA';
+						} else if ($cate=='750MA') {
+							$dri = '1500MA';
+						} else {
+							$dri = 'B';
+						}
+						if (!empty($_GET['driver']) && !empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].") and A.Watts IN (".$_GET['watt'].") order by A.Driver";
+						} else if (!empty($_GET['driver']) && empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].")  order by A.Driver";
+						} else if(empty($_GET['driver']) && !empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Watts IN (".$_GET['watt'].") order by A.Watts";
+						} else {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and Driver NOT LIKE '%".$dri."%'";
+						}
+					} else {
+						$queryy="SELECT * FROM UserRoles WHERE RoleID = '2'";
+						$resultt = mysqli_query($conn, $queryy);
+						$rows = mysqli_fetch_assoc($resultt);
+						$cate = $rows['assigndriver'];
+						if ($cate == '1500MA') {
+							$dri = '750MA';
+						} else if ($cate=='750MA') {
+							$dri = '1500MA';
+						} else {
+							$dri = 'B';
+						}
+						if (!empty($_GET['driver']) && !empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].") and A.Watts IN (".$_GET['watt'].") order by A.Driver";
+						} else if(!empty($_GET['driver']) && empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].")  order by A.Driver";
+						} else if(empty($_GET['driver']) && !empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and A.Driver NOT LIKE '%".$dri."%' and A.Watts IN (".$_GET['watt'].") order by A.Watts";
+						} else {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where A.ModelID='".$_GET['ModelId']."' and Driver NOT LIKE '%".$dri."%'";
+						}
+					}
 				}
 				if (!empty($_GET['SubCategory'])) {
-					
-						$query .= "BrandModel A  inner join BrandSubCategory B on A.SubCategoryID=B.SubCategoryID where B.SubCategory='".$_GET['SubCategory']."'";
-					
+					$query .= "BrandModel A  inner join BrandSubCategory B on A.SubCategoryID=B.SubCategoryID where B.SubCategory='".$_GET['SubCategory']."'";
 				}
-				if(!empty($_GET['id'])){
-					if(!empty($users['AssignedCategories'])){
-										$query .= "BrandCategory WHERE is_deleted = '0' AND CategoryID IN ({$users['AssignedCategories']})";
-					}
-					else{
+				if (!empty($_GET['id'])) {
+					if (!empty($users['AssignedCategories'])) {
+						$query .= "BrandCategory WHERE is_deleted = '0' AND CategoryID IN ({$users['AssignedCategories']})";
+					} else {
 						$query .="BrandSubCategory WHERE is_deleted = '0' GROUP BY SubCategory";
 					}
 				}
-				if(!empty($_GET['Model'])){
-											$modelname = utf8_decode(urldecode($_GET['Model']));
-											if($userId!=''){
-												$queryy="select * from Users where UserID='$userId'";
-												$resultt = mysqli_query($conn, $queryy);
-											$rows = mysqli_fetch_assoc($resultt);
-											$cate=$rows['AssignDriver'];
-											if($cate == '1500MA'){
-												$dri = '750MA';
-											}
-											else if($cate=='750MA'){
-												$dri = '1500MA';
-											}
-											else{
-												$dri = 'B';
-											}
-											if(!empty($_GET['driver']) && !empty($_GET['watt'])){
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].") and A.Watts IN (".$_GET['watt'].") order by A.Driver";
-												}else if(!empty($_GET['driver']) && empty($_GET['watt'])){
-												$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].")  order by A.Driver";
-												}
-												else if(empty($_GET['driver']) && !empty($_GET['watt'])){
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Watts IN (".$_GET['watt'].") order by A.Watts";
-												}
-												else{
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%'";
-												}
-										  //echo $query3;
-											}else{
-												$queryy="select * from UserRoles where RoleID='2'";
-												$resultt = mysqli_query($conn, $queryy);
-											$rows = mysqli_fetch_assoc($resultt);
-											$cate=$rows['assigndriver'];
-											if($cate == '1500MA'){
-												$dri = '750MA';
-											}
-											else if($cate=='750MA'){
-												$dri = '1500MA';
-											}
-											else{
-												$dri = 'B';
-											}
-												
-												if(!empty($_GET['driver']) && !empty($_GET['watt'])){
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].") and A.Watts IN (".$_GET['watt'].") order by A.Driver";
-												}else if(!empty($_GET['driver']) && empty($_GET['watt'])){
-												$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].")  order by A.Driver";
-												}
-												else if(empty($_GET['driver']) && !empty($_GET['watt'])){
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Watts IN (".$_GET['watt'].") order by A.Watts";
-												}
-												else{
-													$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%'";
-												}
-												   // echo $query3;
-												}
+				if (!empty($_GET['Model'])) {
+					$modelname = utf8_decode(urldecode($_GET['Model']));
+					if ($userId!='') {
+						$queryy = "SELECT * FROM Users WHERE UserID='$userId'";
+						$resultt = mysqli_query($conn, $queryy);
+						$rows = mysqli_fetch_assoc($resultt);
+						$cate = $rows['AssignDriver'];
+						if ($cate == '1500MA') {
+							$dri = '750MA';
+						} else if ($cate=='750MA') {
+							$dri = '1500MA';
+						} else {
+							$dri = 'B';
+						}
+						if (!empty($_GET['driver']) && !empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].") and A.Watts IN (".$_GET['watt'].") order by A.Driver";
+						} else if (!empty($_GET['driver']) && empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].")  order by A.Driver";
+						} else if (empty($_GET['driver']) && !empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Watts IN (".$_GET['watt'].") order by A.Watts";
+						} else {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%'";
+						}
+					} else {
+						$queryy = "SELECT * FROM UserRoles WHERE RoleID = '2'";
+						$resultt = mysqli_query($conn, $queryy);
+						$rows = mysqli_fetch_assoc($resultt);
+						$cate = $rows['assigndriver'];
+						if ($cate == '1500MA') {
+							$dri = '750MA';
+						} else if ($cate=='750MA') {
+							$dri = '1500MA';
+						} else {
+							$dri = 'B';
+						}
+						if (!empty($_GET['driver']) && !empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].") and A.Watts IN (".$_GET['watt'].") order by A.Driver";
+						} else if (!empty($_GET['driver']) && empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Driver IN (".$_GET['driver'].")  order by A.Driver";
+						} else if (empty($_GET['driver']) && !empty($_GET['watt'])) {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%' and A.Watts IN (".$_GET['watt'].") order by A.Watts";
+						} else {
+							$query .= "productdetails A inner join BrandModel B on A.ModelID=B.ModelID where B.Model='".$_GET['Model']."' and A.Driver NOT LIKE '%".$dri."%'";
+						}
+					}
 				}
 				
 				//echo $query;
@@ -393,38 +378,41 @@
 							<div class="col-lg-12 col-mg-6"></div>
 						</div>
 						<div class="widget-category mb-30">
-							
-						<!-- Fillter By Price -->
-						<?php if(empty($userId)){  ?>
-						<h5 class="section-title style-1 mb-30 wow fadeIn animated animated animated" style="visibility: visible;">Categories</h5>
-							<div>
+							<!-- Fillter By Price -->
 							<?php
-							
-							$query5 = "SELECT * FROM BrandSubCategory WHERE is_deleted = '0' GROUP BY SubCategory";
-							
-							//echo $users['AssignedCategories'];
-				$result5 = mysqli_query($conn, $query5) or die(mysqli_error($conn));
-				while ($row5 = mysqli_fetch_assoc($result5)) {
-							   
-								$subcategory = $row5['SubCategory'];
-				?>
-							<button class="collapsiblee" style="border:1px solid #e8e8e8;width:100%;background-color:white;padding: 6px 0;text-align:center"><?= ucwords(strtolower($subcategory)) ?></button>
-							<div class="contente">
-							<?php $query6 = "Select DISTINCT(A.Model) from BrandModel A  inner join BrandSubCategory B on A.SubCategoryID=B.SubCategoryID where B.SubCategory='".$subcategory."' order by B.CategoryID";
-				$result6 = mysqli_query($conn, $query6) or die(mysqli_error($conn));
-				while ($row6 = mysqli_fetch_assoc($result6)) {
-								$modelid = $row6['ModelID'];
-								$modelname = $row6['Model'];
+								if (empty($userId)) {
+							?>
+							<h5 class="section-title style-1 mb-30 wow fadeIn animated animated animated" style="visibility: visible;">Categories</h5>
+							<div>
+								<?php
+									$query5 = "SELECT * FROM BrandSubCategory WHERE is_deleted = '0' GROUP BY SubCategory";
+									//echo $users['AssignedCategories'];
+									$result5 = mysqli_query($conn, $query5) or die(mysqli_error($conn));
+									while ($row5 = mysqli_fetch_assoc($result5)) {
+										$subcategory = $row5['SubCategory'];
 								?>
-							
-								<ul class="categories">
-								<li style="border-bottom:1px solid #cdc8c8;padding:5px"><a href="Products.php?Model=<?= $modelname ?>"><?= ucwords(strtolower($modelname)) ?></a></li>
-								</ul>
-								<?php } ?>
+								<button class="collapsiblee" style="border:1px solid #e8e8e8;width:100%;background-color:white;padding: 6px 0;text-align:center"><?= ucwords(strtolower($subcategory)) ?></button>
+								<div class="contente">
+									<?php
+										$query6 = "SELECT DISTINCT(A.Model), A.ModelID FROM BrandModel A INNER JOIN BrandSubCategory B ON A.SubCategoryID=B.SubCategoryID WHERE B.SubCategory='".$subcategory."' ORDER BY B.CategoryID";
+										$result6 = mysqli_query($conn, $query6) or die(mysqli_error($conn));
+										while ($row6 = mysqli_fetch_assoc($result6)) {
+											$modelid = $row6['ModelID'];
+											$modelname = $row6['Model'];
+									?>
+									<ul class="categories">
+										<li style="border-bottom:1px solid #cdc8c8;padding:5px"><a href="Products.php?Model=<?= $modelname ?>"><?= ucwords(strtolower($modelname)) ?></a></li>
+									</ul>
+									<?php
+										}
+									?>
+								</div>
+								<?php
+									}
+								?>
 							</div>
-							<?php } ?>
-</div>
-					 <?php   }else{
+						<?php
+						}else{
 						?>
 						<h5 class="section-title style-1 mb-30 wow fadeIn animated animated animated" style="visibility: visible;">Brands</h5>
 						<div>
@@ -482,19 +470,19 @@ for (i = 0; i < coll.length; i++) {
 					<h5 class="section-title style-1 mb-30 wow fadeIn animated animated animated">Driver</h5>
 					<form method="get" id="header-form">
 						<div class="custome-checkbox">
-							<input class="form-check-input driver" type="checkbox" name="driver" id="300MA" value="300" <?= (str_contains($_GET['driver'], '300')) ? 'checked' : '' ?>>
+							<input class="form-check-input driver" type="checkbox" name="driver" id="300MA" value="300" <?= (str_contains($driver, '300')) ? 'checked' : '' ?>>
 							<label class="form-check-label" for="300MA"><span>300 MA</span></label>
 							<br>
-							<input class="form-check-input driver" type="checkbox" name="driver" id="600MA" value="600" <?= (str_contains($_GET['driver'], '600')) ? 'checked' : '' ?>>
+							<input class="form-check-input driver" type="checkbox" name="driver" id="600MA" value="600" <?= (str_contains($driver, '600')) ? 'checked' : '' ?>>
 							<label class="form-check-label" for="600MA"><span>600 MA</span></label>
 							<br>
-							<input class="form-check-input driver" type="checkbox" name="driver" id="900MA" value="900" <?= (str_contains($_GET['driver'], '900')) ? 'checked' : '' ?>>
+							<input class="form-check-input driver" type="checkbox" name="driver" id="900MA" value="900" <?= (str_contains($driver, '900')) ? 'checked' : '' ?>>
 							<label class="form-check-label" for="900MA"><span>900 MA</span></label>
 							<br>
-							<input class="form-check-input driver" type="checkbox" name="driver" id="750MA" value="750" <?= (str_contains($_GET['driver'], '750')) ? 'checked' : '' ?>>
+							<input class="form-check-input driver" type="checkbox" name="driver" id="750MA" value="750" <?= (str_contains($driver, '750')) ? 'checked' : '' ?>>
 							<label class="form-check-label" for="750MA"><span>750 MA</span></label>
 							<br>
-							<input class="form-check-input driver" type="checkbox" name="driver" id="1500MA" value="1500" <?= (str_contains($_GET['driver'], '1500')) ? 'checked' : '' ?>>
+							<input class="form-check-input driver" type="checkbox" name="driver" id="1500MA" value="1500" <?= (str_contains($driver, '1500')) ? 'checked' : '' ?>>
 							<label class="form-check-label" style="margin-bottom:15px"  for="1500MA"><span>1500 MA</span></label>
 						</div>
 					</form>
@@ -510,7 +498,7 @@ for (i = 0; i < coll.length; i++) {
 										$new_str_arr = explode('W', $watts);
 										$wattno = $new_str_arr[0];
 								?>  
-								<div class="col-lg-4" style="padding-left:0px"><input class="form-check-input watt" type="checkbox" name="watt" id="<?= $watts ?>" value="<?= $wattno ?>" <?= (str_contains($_GET['watt'], $wattno)) ? 'checked' : '' ?>>
+								<div class="col-lg-4" style="padding-left:0px"><input class="form-check-input watt" type="checkbox" name="watt" id="<?= $watts ?>" value="<?= $wattno ?>" <?= (str_contains($watt, $wattno)) ? 'checked' : '' ?>>
 								<label class="form-check-label" for="<?= $watts ?>"><span><?= $watts ?></span></label></div>
 								<?php
 									}
@@ -1169,21 +1157,21 @@ for (i = 0; i < coll.length; i++) {
 					var urlparts= url.split('?');
 
 					if (urlparts.length>=2) {
-						var urlBase=urlparts.shift(); 
-						var queryString=urlparts.join("?"); 
-
-						var prefix = encodeURIComponent(parameter)+'=';
+						var urlBase=urlparts.shift();
+						var queryString=urlparts.join("?");
+						var prefix = encodeURIComponent(parameter) + '=';
+						console.log(prefix);
 						var pars = queryString.split(/[&;]/g);
-						for (var i= pars.length; i-->0;)               
-							if (pars[i].lastIndexOf(prefix, 0)!==-1)   
+						for (var i= pars.length; i-- > 0;)
+							if (pars[i].lastIndexOf(prefix, 0) !== -1)
 								pars.splice(i, 1);
 						url = urlBase+'?'+pars.join('&');
-						//window.history.pushState('',document.title,url); // added this line to push the new url directly to url bar .
+						//window.history.pushState('',document.title,url); // added this line to push the new url directly to url bar.
 						var mainurl = url + "&driver=" + check_box_values;
-						window.location.href=mainurl;
+						window.location.href = mainurl;
 					}
-					//window.location.href = url;
 				});
+
 				$(".watt").change(function() {
 					var check_box_values = $('#watt-form [type="checkbox"]:checked').map(function () {
 						return this.value;
@@ -1193,20 +1181,18 @@ for (i = 0; i < coll.length; i++) {
 					var parameter = "watt";
 					var url=document.location.href;
 					var urlparts= url.split('?');
-
 					if (urlparts.length>=2) {
-						var urlBase=urlparts.shift(); 
-						var queryString=urlparts.join("?"); 
-
+						var urlBase=urlparts.shift();
+						var queryString=urlparts.join("?");
 						var prefix = encodeURIComponent(parameter)+'=';
 						var pars = queryString.split(/[&;]/g);
-						for (var i= pars.length; i-->0;)               
-							if (pars[i].lastIndexOf(prefix, 0)!==-1)   
+						for (var i= pars.length; i-- > 0;)
+							if (pars[i].lastIndexOf(prefix, 0) !== -1)
 								pars.splice(i, 1);
 						url = urlBase+'?'+pars.join('&');
 						//window.history.pushState('',document.title,url); // added this line to push the new url directly to url bar .
 						var mainurl = url + "&watt=" + check_box_values;
-						window.location.href=mainurl;
+						window.location.href = mainurl;
 					}
 				});
 			});

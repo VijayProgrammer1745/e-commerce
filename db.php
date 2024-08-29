@@ -11,7 +11,6 @@
 	$mysql_password = 'j-yK$Kt23v4R'; 
 	$mysql_database = "creatsjs_pcb_ramdev";
 
-
 	$conn = new mysqli($mysql_hostname, $mysql_user, $mysql_password, $mysql_database);
 
 	if ($conn->connect_error) {

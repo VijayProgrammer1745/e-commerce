@@ -152,8 +152,8 @@
 													$result = mysqli_query($conn,$query);
 													while ($row=mysqli_fetch_assoc($result)) {
 												?>
-												<figure class="border-radius-10" style="background:white">
-													<img src="<?php echo $row['ImageName'] ?>" alt="product image" style="width: 100%;">
+												<figure class="border-radius-10" style="background:white;">
+													<img src="<?php echo $row['ImageName'] ?>" alt="product image" />
 												</figure>
 												<?php
 													}
@@ -362,65 +362,7 @@
 								        <h3 class="section-title style-1 mb-30">Why Choose Us</h3>
 								        <div class="col-lg-8 m-auto entry-main-content"> <img src="assets/imgs/features.jpg"> </div>
 								    </div>
-								    
-									<!--<div class="col-12">
-										<h3 class="section-title style-1 mb-30">Related products</h3>
-									</div>
-									<div class="col-12">
-										<div class="row related-products">
-											<?php
-												$query = "SELECT d.ProductID, d.AddedDate, a.category as 'Category', b.subcategory as 'Sub-Category', c.model as 'Model', d.ProductNumber as 'Product', d.Watts, d.Driver, d.Size, d.LEDCount, d.Weight, d.HSNCode, d.GSTPercent, d.BtoBPrice1, d.BtoBPrice2, d.BtoBPrice3, d.image, d.ProductVideo, d.ProductPDF FROM BrandModel c INNER JOIN BrandCategory a ON a.id = c.category INNER JOIN BrandSubCategory b ON b.id = c.subcategory INNER JOIN productdetails d ON c.id = d.model WHERE d.cstatus='1' AND b.subcategory = '$SubCategory' AND d.watt != '$watt' LIMIT 4";
-												$result=mysqli_query($conn, $query);
-												while($row=mysqli_fetch_array($result)) {
-													$ids=$row['id']; 
-													$subcategory=$row['Sub-Category'];
-													$watts=$row['watt'];
-													$prices=$row['price'];
-													$image=!empty($row['image']) ? $row['image'] : 'https://admin.ramdevpcb.com/assets/images/product_images/default_product.png';
-											?>
-											<div class="col-lg-3 col-md-4 col-12 col-sm-6">
-												<div class="product-cart-wrap small hover-up">
-													<div class="product-img-action-wrap">
-														<div class="product-img product-img-zoom">
-															<a href="Product_Details.php?id=<?= $ids ?>" tabindex="0">
-																<img class="default-img" src="Admin/Uploads/Product/<?= $image ?>" alt="">
-																<img class="hover-img" src="Admin/Uploads/Product/<?= $image ?>" alt="">
-															</a>
-														</div>
-														<!--<div class="product-action-1">
-															<a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
-															<a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
-															<a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
-														</div>--
-														<div class="product-badges product-badges-position product-badges-mrg">
-															<span class="hot">Best</span>
-														</div>
-													</div>
-													<div class="product-content-wrap">
-														<h2><a href="Product_Details.php?id=<?= $ids ?>" tabindex="0"><?= $subcategory.'('.$watts.')' ?></a></h2>
-														<div class="rating-result" title="90%">
-															<span>
-															</span>
-														</div>
-														<div class="product-price">
-															<span>&#8377; <?= $prices ?></span>
-														</div>
-													</div>
-												</div>
-											</div>
-											<?php
-												}
-											?>
-										</div>
-									</div>-->
-								</div><!--
-								<div class="banner-img banner-big wow fadeIn f-none animated mt-50">
-									<img class="border-radius-10" src="assets/imgs/banner/banner-4.png" alt="">
-									<div class="banner-text">
-										<h4 class="mb-15 mt-40">Repair Services</h4>
-										<h2 class="fw-600 mb-20">We're an Apple <br>Authorised Service Provider</h2>
-									</div>
-								</div>-->
+								</div>
 							</div>
 						</div>
 					</div>
@@ -428,22 +370,6 @@
 			</section>
 		</main>
 		<?php include('footer.php') ?>
-		<!-- Preloader Start -->
-	<!--	<div id="preloader-active">
-			<div class="preloader d-flex align-items-center justify-content-center">
-				<div class="preloader-inner position-relative">
-					<div class="text-center">
-						<h5 class="mb-5">Now Loading</h5>
-						<div class="loader">
-							<div class="bar bar1"></div>
-							<div class="bar bar2"></div>
-							<div class="bar bar3"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>-->
-		<!-- Vendor JS-->
 		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 		<script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
 		<script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
