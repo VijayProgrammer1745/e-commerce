@@ -21,7 +21,7 @@
 		$price_200 = $row['BtoBPrice1'];
 		$price_1000 = $row['BtoBPrice2'];
 		$price_more1000 = $row['BtoBPrice3'];
-		if( $_SESSION['user_role'] == 1) {
+		if($_SESSION['user_role'] == 1) {
 			if ($row['ProductQuantity'] <= 100) {
 				$price = $price_200;
 			} else if ($row['ProductQuantity'] > 100 && $row['ProductQuantity'] <= 1000) {
